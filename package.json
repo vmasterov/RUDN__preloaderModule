@@ -1,0 +1,68 @@
+{
+  "name": "RUDN__preloaderModule",
+  "version": "1.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "d": "SET NODE_ENV=development&&gulp development",
+    "p": "SET NODE_ENV=production&&gulp production",
+    "t": "mocha --reporter nyan --require @babel/register"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vmasterov/vmcommonProject.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vmasterov/vmcommonProject/issues"
+  },
+  "homepage": "https://github.com/vmasterov/vmcommonProject#readme",
+  "devDependencies": {
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/register": "^7.4.4",
+    "assets-webpack-plugin": "^3.9.10",
+    "babel-loader": "^8.0.6",
+    "browser-sync": "^2.26.7",
+    "chai": "^4.2.0",
+    "del": "^4.1.1",
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.2.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-css-replace-url": "^0.2.4",
+    "gulp-debug": "^4.0.0",
+    "gulp-footer": "^2.0.2",
+    "gulp-header": "^2.0.7",
+    "gulp-if": "^2.0.2",
+    "gulp-imagemin": "^6.0.0",
+    "gulp-load-plugins": "^1.6.0",
+    "gulp-notify": "^3.2.0",
+    "gulp-plumber": "^1.2.1",
+    "gulp-rename": "^1.4.0",
+    "gulp-rev": "^9.0.0",
+    "gulp-rev-rewrite": "^1.1.4",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-uglify": "^3.0.2",
+    "gulp-uglify-es": "^1.0.4",
+    "gulplog": "^1.0.0",
+    "imagemin-jpeg-recompress": "^6.0.0",
+    "imagemin-pngquant": "^8.0.0",
+    "mocha": "^6.1.4",
+    "node-sass": "^4.12.0",
+    "path": "^0.12.7",
+    "stream-combiner2": "^1.1.1",
+    "vinyl-named": "^1.1.0",
+    "webpack": "^4.35.2",
+    "webpack-stream": "^5.2.1"
+  },
+  "dependencies": {
+    "bootstrap": "^3.4.1",
+    "jquery": "^3.4.1"
+  }
+}

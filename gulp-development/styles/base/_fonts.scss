@@ -1,0 +1,21 @@
+/* Fonts example */
+@font-face {
+  font-family: "Oswald";
+  src:
+          //url("../../fonts/Helvetica/HelveticaRegular/HelveticaRegular.eot"),
+          //url("../../fonts/Helvetica/HelveticaRegular/HelveticaRegular.woff") format("woff"),
+          url("../../fonts/Oswald[wght].ttf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Oswald SemiBold";
+  src:
+          //url("../../fonts/Helvetica/HelveticaRegular/HelveticaRegular.eot"),
+          //url("../../fonts/Helvetica/HelveticaRegular/HelveticaRegular.woff") format("woff"),
+          url("../../fonts/Oswald[wght].ttf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+}
+/* Fonts example */

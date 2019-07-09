@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Mocha Tests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="../../gulp-production/css/gulp-libs.css">
+    <link rel="stylesheet" href="../../gulp-production/css/gulp-main.css">
+
+
+    <link rel="stylesheet" href="../../node_modules/mocha/mocha.css" />
+
+    <style>
+        #mocha h1 {
+            margin-bottom: 25px;
+        }
+
+        #mocha .test {
+            margin-top: 8px;
+        }
+
+        #mocha .test.pass::before{
+            margin-top: -3px;
+            font-size: 14px;
+        }
+
+        #mocha h2 {
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+<div id="mocha"></div>
+
+<section class="test-preloader">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>RUDN Preloader Module</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="test-preloader-block">
+                    <div class="test-preloader-block__img" style="background-image: none; border: 2px dashed #0079c1;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+<script src="../../node_modules/chai/chai.js"></script>
+<script src="../../node_modules/mocha/mocha.js"></script>
+
+<script class="mocha-init">
+    mocha.setup('bdd');
+    mocha.checkLeaks();
+</script>
+
+<script>
+    var assert = chai.assert;
+    var expect = chai.expect;
+</script>
+
+<script src="../../gulp-development/js/modules/rudn-preloader-module.js"></script>
+<script src="rudn-preloader-module.spec.js"></script>
+
+<script class="mocha-exec">
+    mocha.run();
+</script>
+
+</body>
+</html>

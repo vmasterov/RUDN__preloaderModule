@@ -7,7 +7,7 @@ toggleButton.on('click', function () {
             element: $('.test-preloader-block__img'),
             position: 'append'
         });
-        it.removeClass('btn-success').addClass('btn-danger').text('Remove preloader');
+        it.removeClass('btn-success').addClass('btn-danger').text('Hide preloader');
     }
     else{
         preloaderModule.destroy({
@@ -17,8 +17,3 @@ toggleButton.on('click', function () {
         it.removeClass('btn-danger').addClass('btn-success').text('Show preloader');
     }
 });
-
-
-
-// RUDN Preloader Module
-// testModule.sayHi();

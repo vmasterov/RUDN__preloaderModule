@@ -12,16 +12,13 @@
         var template = settings.template || _getDefaultTemplate();
         var position = settings.position || 'after';
 
+        _isElementValid(element);
+
         if (element.hasClass('has-preloader')) {
             return;
         }
 
         element.addClass('has-preloader').css('position', 'relative');
-
-        if (!element || !element.length) {
-            console.error('Preloader module (init method): can`t find element:', element);
-            return;
-        }
 
         switch(position) {
             case 'before':
@@ -83,11 +80,6 @@
         }
     };
 
-    return {
-        init: init,
-        destroy: destroy
-    };
-
     //  Helpers
     function _getDefaultTemplate(){
         var wrapper = $('<div></div>', {
@@ -100,4 +92,23 @@
 
         return wrapper;
     }
+
+    function _isElementValid(element) {
+        if (typeof element === 'undefined') {
+            throw 'Preloader module (init method): an element for the preloader no passed';
+        }
+
+        else if (element && element instanceof $ && !element.length) {
+            throw 'Preloader module (init method): can`t find element for the preloader';
+        }
+
+        else if (typeof element !== 'undefined' && !(element instanceof $)) {
+            throw 'Preloader module (init method): an element is not a jQuery object';
+        }
+    }
+
+    return {
+        init: init,
+        destroy: destroy
+    };
 })();

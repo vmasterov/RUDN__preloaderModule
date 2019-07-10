@@ -8,11 +8,11 @@
      * @param {string} settings.position - where will the preloader be located (before or after the specified element)
      */
     var init = function init(settings){
+        _isSettingsValid(settings, methodName.init);
+
         var element = settings.element;
         var template = settings.template || _getDefaultTemplate();
         var position = settings.position || 'after';
-
-        _isElementValid(element);
 
         if (element.hasClass('has-preloader')) {
             return;
@@ -26,12 +26,15 @@
                 break;
             case 'after':
                 element.after(template);
+
                 break;
             case 'append':
                 element.append(template);
                 break;
         }
     };
+
+
 
     /**
      *
@@ -41,19 +44,11 @@
      * @param {string} settings.position - where will the preloader be located (before or after the specified element)
      */
     var destroy = function destroy(settings){
+        _isSettingsValid(settings, methodName.destroy);
+
         var element = settings.element;
         var preloader = settings.preloader || $('.preloader-module__wrapper');
         var position = settings.position || 'after';
-
-        if (!element || !element.length) {
-            console.error('Preloader module (destroy method): can`t find element:',  element);
-            return;
-        }
-
-        if (!preloader || !preloader.length) {
-            console.error('Preloader module (destroy method): can`t find preloader:',  preloader);
-            return;
-        }
 
         switch(position) {
             case 'before':
@@ -80,6 +75,8 @@
         }
     };
 
+
+
     //  Helpers
     function _getDefaultTemplate(){
         var wrapper = $('<div></div>', {
@@ -93,19 +90,70 @@
         return wrapper;
     }
 
-    function _isElementValid(element) {
-        if (typeof element === 'undefined') {
-            throw 'Preloader module (init method): an element for the preloader no passed';
-        }
 
-        else if (element && element instanceof $ && !element.length) {
-            throw 'Preloader module (init method): can`t find element for the preloader';
-        }
 
-        else if (typeof element !== 'undefined' && !(element instanceof $)) {
-            throw 'Preloader module (init method): an element is not a jQuery object';
+    function _isHTML(string) {
+        var container = document.createElement('div');
+
+        container.innerHTML = string;
+
+        for (var children = container.childNodes, i = children.length; i--; ) {
+            return children[i].nodeType === 1;
         }
     }
+
+
+
+    function _isSettingsValid(settings, method) {
+        // Test of settings.element
+        if (typeof settings.element === 'undefined') {
+            throw `Preloader module (${method}): an element for the preloader no passed`;
+        }
+
+        else if (settings.element && settings.element instanceof $ && !settings.element.length) {
+            throw `Preloader module (${method}): can't find element for the preloader`;
+        }
+
+        else if (typeof settings.element !== 'undefined' && !(settings.element instanceof $)) {
+            throw `Preloader module (${method}): an element is not a jQuery object`;
+        }
+
+
+        // Test of settings.position
+        if (
+            typeof settings.position !== 'undefined' &&
+            settings.position !== 'before' &&
+            settings.position !== 'after' &&
+            settings.position !== 'append'
+        ) {
+            throw `Preloader module (${method}): incorrect position of the preloader`;
+        }
+
+
+        // Test of settings.template
+        if (typeof settings.template !== 'undefined' && !_isHTML(settings.template)) {
+            throw `Preloader module (${method}): template should be a valid html string`;
+        }
+
+
+        // Test of settings.preloader
+        if (settings.preloader && settings.preloader instanceof $ && !settings.preloader.length) {
+            throw `Preloader module (${method}): can't find preloader for the preloader`;
+        }
+
+        else if (typeof settings.preloader !== 'undefined' && !(settings.preloader instanceof $)) {
+            throw `Preloader module (${method}): an preloader is not a jQuery object`;
+        }
+    }
+
+
+
+    var methodName = {
+      init: 'INIT METHOD',
+      destroy: 'DESTROY METHOD'
+    };
+
+
 
     return {
         init: init,

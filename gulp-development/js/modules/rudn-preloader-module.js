@@ -3,12 +3,19 @@
     /**
      *
      * @param {object} settings
-     * @param {jQuery} settings.element - element that need to preloader
-     * @param {string} settings.template - markup for the preloader
-     * @param {string} settings.position - where will the preloader be located (before or after the specified element)
+     *
+     * @param {jQuery} settings.element - element that need to preloader.
+     * Default: -
+     *
+     * @param {string} settings.template - markup for the preloader.
+     * Default: template generated _getDefaultTemplate function.
+     * Css class: preloader-module__wrapper
+     *
+     * @param {string} settings.position - where will the preloader be located (before, after, append).
+     * Default: after
      */
     var init = function init(settings){
-        _isSettingsValid(settings, methodName.init);
+        _isSettingsValid(settings, _methodName.init);
 
         var element = settings.element;
         var template = settings.template || _getDefaultTemplate();
@@ -20,18 +27,7 @@
 
         element.addClass('has-preloader').css('position', 'relative');
 
-        switch(position) {
-            case 'before':
-                element.before(template);
-                break;
-            case 'after':
-                element.after(template);
-
-                break;
-            case 'append':
-                element.append(template);
-                break;
-        }
+        _positions.init[position](element, template);
     };
 
 
@@ -39,40 +35,20 @@
     /**
      *
      * @param {object} settings
-     * @param {jQuery} settings.element - element that need to preloader
-     * @param {jQuery} settings.preloader - the preloader
-     * @param {string} settings.position - where will the preloader be located (before or after the specified element)
+     *
+     * @param {jQuery} settings.element - element that need to preloader.
+     * Default: -
+     *
+     * @param {jQuery} settings.preloader - a template from init method's setting.template
+     * Default: -
      */
     var destroy = function destroy(settings){
-        _isSettingsValid(settings, methodName.destroy);
+        _isSettingsValid(settings, _methodName.destroy);
 
         var element = settings.element;
-        var preloader = settings.preloader || $('.preloader-module__wrapper');
-        var position = settings.position || 'after';
+        var preloader = settings.preloader;
 
-        switch(position) {
-            case 'before':
-                element.prep(preloader).fadeOut(function(){
-                    $(this).remove();
-
-                    element.removeClass('has-preloader').css('position', '');
-                });
-                break;
-            case 'after':
-                element.next(preloader).fadeOut(function(){
-                    $(this).remove();
-
-                    element.removeClass('has-preloader').css('position', '');
-                });
-                break;
-            case 'append':
-                element.find(preloader).fadeOut(function(){
-                    $(this).remove();
-
-                    element.removeClass('has-preloader').css('position', '');
-                });
-                break;
-        }
+        _positions.destroy(element, preloader);
     };
 
 
@@ -107,15 +83,15 @@
     function _isSettingsValid(settings, method) {
         // Test of settings.element
         if (typeof settings.element === 'undefined') {
-            throw `Preloader module (${method}): an element for the preloader no passed`;
+            throw `Preloader module (${method} METHOD): an element for the preloader no passed. Pass an element`;
         }
 
         else if (settings.element && settings.element instanceof $ && !settings.element.length) {
-            throw `Preloader module (${method}): can't find element for the preloader`;
+            throw `Preloader module (${method} METHOD): can't find element for the preloader. Check if element is correct?`;
         }
 
         else if (typeof settings.element !== 'undefined' && !(settings.element instanceof $)) {
-            throw `Preloader module (${method}): an element is not a jQuery object`;
+            throw `Preloader module (${method} METHOD): an element is not a jQuery object`;
         }
 
 
@@ -126,31 +102,58 @@
             settings.position !== 'after' &&
             settings.position !== 'append'
         ) {
-            throw `Preloader module (${method}): incorrect position of the preloader`;
+            throw `Preloader module (${method} METHOD): incorrect position of the preloader. Use: "before", "after", "append" keywords`;
         }
 
 
         // Test of settings.template
         if (typeof settings.template !== 'undefined' && !_isHTML(settings.template)) {
-            throw `Preloader module (${method}): template should be a valid html string`;
+            throw `Preloader module (${method} METHOD): template should be a valid html string`;
         }
 
 
         // Test of settings.preloader
-        if (settings.preloader && settings.preloader instanceof $ && !settings.preloader.length) {
-            throw `Preloader module (${method}): can't find preloader for the preloader`;
+        if (method === 'DESTROY' && typeof settings.preloader === 'undefined') {
+            throw `Preloader module (${method} METHOD): an preloader for the preloader no passed. Pass an preloader`;
         }
 
-        else if (typeof settings.preloader !== 'undefined' && !(settings.preloader instanceof $)) {
-            throw `Preloader module (${method}): an preloader is not a jQuery object`;
+        else if (method === 'DESTROY' && settings.preloader && settings.preloader instanceof $ && !settings.preloader.length) {
+            throw `Preloader module (${method} METHOD): can't find preloader for the preloader. Check if preloader is correct?`;
+        }
+
+        else if (method === 'DESTROY' && typeof settings.preloader !== 'undefined' && !(settings.preloader instanceof $)) {
+            throw `Preloader module (${method} METHOD): an preloader is not a jQuery object`;
         }
     }
 
 
 
-    var methodName = {
-      init: 'INIT METHOD',
-      destroy: 'DESTROY METHOD'
+    var _methodName = {
+      init: 'INIT',
+      destroy: 'DESTROY'
+    };
+
+
+
+    var _positions = {
+        init: {
+            before: function(element, template) {
+                element.before(template);
+            },
+            after: function(element, template) {
+                element.after(template);
+            },
+            append: function(element, template) {
+                element.append(template);
+            }
+        },
+        destroy: function(element, preloader) {
+            element.parent().find('.' + preloader.get(0).className).fadeOut(function(){
+                $(this).remove();
+
+                element.removeClass('has-preloader').css('position', '');
+            });
+        }
     };
 
 

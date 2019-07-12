@@ -11,6 +11,7 @@ describe("RUDN Preloader Module", function () {
         function () {
             alert(1);
         }
+        // $('.test-preloader-block__img')
     ];
 
     describe("Test settings of init method", function () {
@@ -86,6 +87,19 @@ describe("RUDN Preloader Module", function () {
                     );
                 });
             });
+
+            it("Throw an error if template will be tag script", function () {
+                assert.throws(
+                    function () {
+                        preloaderModule.init({
+                            element: $('.test-preloader-block__img'),
+                            position: 'append',
+                            template: '<script></script>'
+                        })
+                    },
+                    'Preloader module (INIT METHOD): script tag is not valid'
+                );
+            });
         });
     });
 
@@ -136,7 +150,8 @@ describe("RUDN Preloader Module", function () {
                         function () {
                             preloaderModule.destroy({
                                 element: item,
-                                position: 'append'
+                                position: 'append',
+                                preloader: $('.preloader-module__wrapper')
                             })
                         },
                         'Preloader module (DESTROY METHOD): an element is not a jQuery object'
@@ -182,6 +197,37 @@ describe("RUDN Preloader Module", function () {
                             })
                         },
                         'Preloader module (DESTROY METHOD): an preloader is not a jQuery object'
+                    );
+                });
+            });
+        });
+
+        describe("Settings.callback", function () {
+            it("Execute function if callback is null", function () {
+                const callback = null;
+                assert.isNull(callback, 'null')
+            });
+
+            it("Execute function if callback is undefined", function () {
+                const callback = undefined;
+                assert.isUndefined(callback, 'no tea defined')
+            });
+
+            testValues.forEach((item) => {
+                if (item instanceof Function) {
+                    return true;
+                }
+
+                it("Throw an error if callback is not a function: " + item , function () {
+                    assert.throws(
+                        function () {
+                            preloaderModule.destroy({
+                                element: $('.test-preloader-block__img'),
+                                preloader: $('.preloader-module__wrapper'),
+                                callback: item
+                            })
+                        },
+                        'Preloader module (DESTROY METHOD): callback for the preloader is not a function'
                     );
                 });
             });

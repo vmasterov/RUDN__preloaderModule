@@ -41,14 +41,18 @@
      *
      * @param {jQuery} settings.preloader - a template from init method's setting.template
      * Default: -
+     *
+     * @param {function} settings.callback - will be executed when preloader's fade animation is finished
+     * Default: -
      */
     var destroy = function destroy(settings){
         _isSettingsValid(settings, _methodName.destroy);
 
         var element = settings.element;
         var preloader = settings.preloader;
+        var callback = settings.callback;
 
-        _positions.destroy(element, preloader);
+        _positions.destroy(element, preloader, callback);
     };
 
 
@@ -68,15 +72,31 @@
 
 
 
-    function _isHTML(string) {
+    function _isHTML(string, method) {
         var container = document.createElement('div');
 
         container.innerHTML = string;
 
-        for (var children = container.childNodes, i = children.length; i--; ) {
+        for (var children = container.childNodes, i = children.length; i--;) {
+            if (isValidHTML(children[i].tagName)) {
+                throw `Preloader module (${method} METHOD): script tag is not valid`;
+            }
             return children[i].nodeType === 1;
         }
     }
+
+
+
+    function isValidHTML(tag) {
+        return tag === 'SCRIPT';
+    }
+
+
+
+    var _methodName = {
+        init: 'INIT',
+        destroy: 'DESTROY'
+    };
 
 
 
@@ -97,6 +117,7 @@
 
         // Test of settings.position
         if (
+            method === _methodName.init &&
             typeof settings.position !== 'undefined' &&
             settings.position !== 'before' &&
             settings.position !== 'after' &&
@@ -107,31 +128,29 @@
 
 
         // Test of settings.template
-        if (typeof settings.template !== 'undefined' && !_isHTML(settings.template)) {
+        if (typeof settings.template !== 'undefined' && !_isHTML(settings.template, method)) {
             throw `Preloader module (${method} METHOD): template should be a valid html string`;
         }
 
 
         // Test of settings.preloader
-        if (method === 'DESTROY' && typeof settings.preloader === 'undefined') {
+        if (method === _methodName.destroy && typeof settings.preloader === 'undefined') {
             throw `Preloader module (${method} METHOD): an preloader for the preloader no passed. Pass an preloader`;
         }
 
-        else if (method === 'DESTROY' && settings.preloader && settings.preloader instanceof $ && !settings.preloader.length) {
+        else if (method === _methodName.destroy && settings.preloader && settings.preloader instanceof $ && !settings.preloader.length) {
             throw `Preloader module (${method} METHOD): can't find preloader for the preloader. Check if preloader is correct?`;
         }
 
-        else if (method === 'DESTROY' && typeof settings.preloader !== 'undefined' && !(settings.preloader instanceof $)) {
+        else if (method === _methodName.destroy && typeof settings.preloader !== 'undefined' && !(settings.preloader instanceof $)) {
             throw `Preloader module (${method} METHOD): an preloader is not a jQuery object`;
         }
+
+        // Test of settings.callback
+        if (method === _methodName.destroy && typeof settings.callback !== 'undefined' && !(settings.callback instanceof Function)) {
+            throw `Preloader module (${method} METHOD): callback for the preloader is not a function`;
+        }
     }
-
-
-
-    var _methodName = {
-      init: 'INIT',
-      destroy: 'DESTROY'
-    };
 
 
 
@@ -147,11 +166,15 @@
                 element.append(template);
             }
         },
-        destroy: function(element, preloader) {
+        destroy: function(element, preloader, callback) {
             element.parent().find('.' + preloader.get(0).className).fadeOut(function(){
                 $(this).remove();
 
                 element.removeClass('has-preloader').css('position', '');
+
+                if (callback) {
+                    callback.apply(null, arguments);
+                }
             });
         }
     };

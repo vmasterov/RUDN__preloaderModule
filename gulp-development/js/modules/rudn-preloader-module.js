@@ -36,19 +36,27 @@
      *
      * @param {object} settings
      *
-     * @param {jQuery} settings.element - element that need to preloader.
+     * @param {jQuery} settings.element - an element that need to preloader.
      * Default: -
      *
      * @param {jQuery} settings.preloader - a template from init method's setting.template
+     * Default: -
+     *
+     * @param {function} settings.callback - a callback function than will call after animation is finished
+     * Default: -
+     *
+     * @param {array} settings.arguments - a callback function arguments
      * Default: -
      */
     var destroy = function destroy(settings){
         _isSettingsValid(settings, _methodName.destroy);
 
-        var element = settings.element;
-        var preloader = settings.preloader;
-
-        _positions.destroy(element, preloader);
+        _positions.destroy(
+            settings.element,
+            settings.preloader,
+            settings.callback,
+            settings.arguments
+        );
     };
 
 
@@ -69,13 +77,21 @@
 
 
     function _isHTML(string) {
-        var container = document.createElement('div');
-
-        container.innerHTML = string;
-
-        for (var children = container.childNodes, i = children.length; i--; ) {
-            return children[i].nodeType === 1;
+        if (!string) {
+            return false;
         }
+
+        var container = document.createElement('div');
+        container.innerHTML = string;
+        var children = container.childNodes;
+
+        for (var i = 0, l = children.length; i < l; i++) {
+            if (children[i].nodeType !== 1) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 
@@ -147,11 +163,15 @@
                 element.append(template);
             }
         },
-        destroy: function(element, preloader) {
+        destroy: function(element, preloader, callback, args) {
             element.parent().find('.' + preloader.get(0).className).fadeOut(function(){
                 $(this).remove();
 
                 element.removeClass('has-preloader').css('position', '');
+
+                if (callback) {
+                    callback.apply(null, args);
+                }
             });
         }
     };

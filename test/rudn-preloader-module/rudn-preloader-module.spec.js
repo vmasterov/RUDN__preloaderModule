@@ -101,7 +101,6 @@ describe("RUDN Preloader Module", function () {
         afterEach(() => {
             preloaderModule.destroy({
                 element: $('.test-preloader-block__img'),
-                position: 'append',
                 preloader: $('.preloader-module__wrapper')
             })
         });
@@ -163,7 +162,6 @@ describe("RUDN Preloader Module", function () {
                     function () {
                         preloaderModule.destroy({
                             element: $('.test-preloader-block__img'),
-                            position: 'append',
                             preloader: $('.test-preloader-block__img1')
                         })
                     },
@@ -177,7 +175,6 @@ describe("RUDN Preloader Module", function () {
                         function () {
                             preloaderModule.destroy({
                                 element: $('.test-preloader-block__img'),
-                                position: 'append',
                                 preloader: item
                             })
                         },

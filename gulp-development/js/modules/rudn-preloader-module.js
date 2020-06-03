@@ -47,12 +47,7 @@
      */
     var destroy = function destroy(settings){
         _isSettingsValid(settings, _methodName.destroy);
-
-        var element = settings.element;
-        var preloader = settings.preloader;
-        var callback = settings.callback;
-
-        _positions.destroy(element, preloader, callback);
+        _positions.destroy(settings.element, settings.preloader,  settings.callback);
     };
 
 

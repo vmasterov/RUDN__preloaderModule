@@ -32,7 +32,7 @@ toggleButton.on('click', function () {
                 element: it.closest('.test-preloader-block').find('.test-preloader-block__img'),
                 preloader: it.closest('.test-preloader-block').find('.custom-preloader'),
                 callback: function () {
-                    it.attr('disabled', false).removeClass('btn-danger').addClass('btn-success').text('Show preloader');
+                    it.attr('disabled', false).removeClass('btn-danger').addClass('btn-success').text('Show different color preloader');
                 }
             });
         }
@@ -44,7 +44,7 @@ toggleButton.on('click', function () {
                 element: it.closest('.test-preloader-block').find('.test-preloader-block__img'),
                 preloader: it.closest('.test-preloader-block').find('.preloader-module__wrapper'),
                 callback: function () {
-                    it.attr('disabled', false).removeClass('btn-danger').addClass('btn-success').text('Show preloader');
+                    it.attr('disabled', false).removeClass('btn-danger').addClass('btn-success').text('Show animate preloader');
                 }
             });
         }
